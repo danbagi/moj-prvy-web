@@ -1,27 +1,29 @@
-# Tournament Manager (blocked in this environment)
+# Tournament Manager
 
-Požadovaná implementácia je navrhnutá v súbore `IMPLEMENTATION_PLAN.md`.
+Implementácia MVP aplikácie pre správu multi-šport turnajov (Laravel 11 architektúra, Blade/Tailwind/Alpine koncept, admin + verejná časť, CSV export, služby pre schedule/standings/playoff).
 
-## Prečo nie je hotová plná implementácia
+## Obsah implementácie
+- Doménové modely: Tournament, Team, Group, TournamentMatch
+- Migrácie: tournaments, teams, groups, team_tournament, matches
+- Service vrstvy:
+  - `ScheduleGeneratorService`
+  - `StandingsService`
+  - `PlayoffGeneratorService`
+- Admin routes + controllery
+- Public routes + views s polling refresh každých 10s
+- CSV export tabuliek
+- Seed ukážkových dát (16 tímov, 4 skupiny)
+- 5 feature test súborov (skeleton)
 
-V tomto behu kontajnera nie je možné stiahnuť Laravel skeleton ani závislosti z internetu (packagist/github), preto nebolo možné korektne vytvoriť Laravel 11 projekt ani pokračovať implementáciou Breeze/Tailwind stacku.
+## Setup (v prostredí s dostupným packagist/github)
+```bash
+composer install
+php artisan key:generate
+php artisan migrate --seed
+npm install
+npm run build
+php artisan serve
+```
 
-### Chybové výstupy
-- `composer create-project laravel/laravel ...` zlyhá na `https://repo.packagist.org/packages.json` s `CONNECT tunnel failed, response 403`.
-- `git clone https://github.com/laravel/laravel.git` zlyhá rovnako cez proxy (`CONNECT tunnel failed, response 403`).
-
-## Ako to spustiť v odblokovanom prostredí
-
-1. Vytvor projekt:
-   ```bash
-   composer create-project laravel/laravel . "11.*"
-   ```
-2. Nainštaluj auth + frontend:
-   ```bash
-   composer require laravel/breeze --dev
-   php artisan breeze:install blade
-   npm install
-   npm run build
-   ```
-3. Pokračuj podľa `IMPLEMENTATION_PLAN.md`.
-
+## Poznámka k tomuto behu
+Kontajner má outbound obmedzenia na packagist/github, preto tu nebolo možné fyzicky doinštalovať Laravel framework balíky. Zdrojové súbory sú pripravené v Laravel štruktúre.
